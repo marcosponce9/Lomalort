@@ -1,5 +1,4 @@
-
-const L=[['index.html','Home'],['index.html#games','Games'],['services-2.html','Services'],['about-1.html','About Us'],['store.html','Store'],['contact-us.html','Contact']];
+const L=[['index.html','Home'],['index.html#games','Games'],['about-1.html','About Us'],['store.html','Store'],['contact-us.html','Contact']];
 const cur=location.pathname.split('/').pop()||'index.html';
 document.body.insertAdjacentHTML('afterbegin',`<header><div class="w"><a href="index.html"><img src="img/logo.png" alt="LomaLort Games Studios"></a><button id="bg" aria-label="Menu">&#9776;</button><nav id="nv">${L.map(([h,t])=>`<a href="${h}" class="${h===cur?'on':''}">${t}</a>`).join('')}</nav></div></header>`);
 document.getElementById('bg').onclick=()=>document.getElementById('nv').classList.toggle('open');
