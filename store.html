@@ -10,7 +10,7 @@
 <link rel="icon" href="img/logo.png">
 <link rel="stylesheet" href="style.css">
 <style>
-  /* Estilos del carrusel: usamos contain para que la imagen se vea entera sin zoom */
+  /* Estilos del carrusel: contain evita el zoom y muestra el producto completo */
   .ph { 
     position: relative; 
     overflow: hidden; 
@@ -24,7 +24,7 @@
   .ph img { 
     max-width: 100%; 
     max-height: 100%; 
-    object-fit: contain; /* Esto evita el zoom y muestra el producto entero */
+    object-fit: contain; 
     display: block; 
   }
   .sld-btn {
@@ -48,69 +48,64 @@
 <body>
 <section>
 <div class="w">
-<h1>Store - Prueba Desk Mat</h1>
-<p class="mute">Galería interactiva con las imágenes completas de Printful.</p>
+<h1>Store</h1>
+<p class="mute">Explore our official merch and support us as we continue creating games, stories, characters, and worlds.</p>
+<div class="tabs" id="tb"></div>
 <div class="grid" id="pd"></div>
 </div>
 </section>
 
 <script>
-// Lista usando exactamente los nombres de tus archivos descargados
-const productosPrueba = [
-  {
-    name: 'Marcux Desk mat',
-    price: 13.00,
-    imgs: [
-      'img/store/desk-mat marcux (1).png',
-      'img/store/desk-mat marcux (2).png',
-      'img/store/desk-mat marcux (3).png',
-      'img/store/desk-mat marcux (4).png',
-      'img/store/desk-mat marcux (5).png',
-      'img/store/desk-mat marcux (6).png',
-      'img/store/desk-mat marcux (7).png',
-      'img/store/desk-mat marcux (8).png',
-      'img/store/desk-mat marcux (9).png',
-      'img/store/desk-mat marcux (10).png',
-      'img/store/desk-mat marcux (11).png',
-      'img/store/desk-mat marcux (12).png',
-      'img/store/desk-mat marcux (13).png',
-      'img/store/desk-mat marcux (14).png',
-      'img/store/desk-mat marcux (15).png',
-      'img/store/desk-mat marcux (16).png',
-      'img/store/desk-mat marcux (17).png',
-      'img/store/desk-mat marcux (18).png'
-    ],
-    link: '#'
-  }
-];
+// Función para generar las rutas de las imágenes en carpetas separadas
+const itemImgs = (folder, fileBase, total) => 
+  Array.from({ length: total }, (_, i) => `img/store/${folder}/${fileBase} (${i + 1}).png`);
+
+// Catálogo con tus productos cargados
+const C = {
+  'Adult Clothing': [
+    // Aquí agregaremos la ropa de adultos más adelante
+  ],
+  "Kids' Clothing": [
+    // Aquí agregaremos la ropa de niños más adelante
+  ],
+  'Accessories': [
+    ['Marcux Desk mat', 13.00, itemImgs('1. desk-mat marcux', 'desk-mat marcux', 18), '#'],
+    ['Don-Tuch Backpack', 50.00, itemImgs('2. don-tuch backpack', 'don-tuch backpack', 96), '#'],
+    ['Don-Tuch Black Glossy Mug', 11.50, itemImgs('3. don-tuch black glossy mug', 'don-tuch black glossy mug', 16), '#']
+  ]
+};
+
+let cur = 'Accessories'; // Iniciamos en Accesorios para ver los 3 productos cargados
 
 function moveSlide(btn, dir) {
   const box = btn.closest('.ph');
-  const imgs = JSON.parse(box.dataset.imgs);
-  let idx = (parseInt(box.dataset.idx) + dir + imgs.length) % imgs.length;
+  const list = JSON.parse(box.dataset.imgs);
+  let idx = (parseInt(box.dataset.idx) + dir + list.length) % list.length;
   box.dataset.idx = idx;
-  box.querySelector('img').src = imgs[idx];
+  box.querySelector('img').src = list[idx];
   box.querySelectorAll('.sld-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
 }
 
-function renderTest() {
-  pd.innerHTML = productosPrueba.map(p => {
-    const multi = p.imgs.length > 1;
+function r() {
+  tb.innerHTML = Object.keys(C).map(c => `<button class="${c === cur ? 'on' : ''}" data-c="${c}">${c}</button>`).join('');
+  
+  pd.innerHTML = C[cur].map(([name, price, list, link]) => {
+    const multi = list.length > 1;
     return `
       <article class="card">
-        <div class="ph" data-imgs='${JSON.stringify(p.imgs)}' data-idx="0">
-          <img src="${p.imgs[0]}" alt="${p.name}" loading="lazy">
+        <div class="ph" data-imgs='${JSON.stringify(list)}' data-idx="0">
+          <img src="${list[0]}" alt="${name}" loading="lazy">
           ${multi ? `
             <button type="button" class="sld-btn sld-prev" onclick="moveSlide(this, -1)">‹</button>
             <button type="button" class="sld-btn sld-next" onclick="moveSlide(this, 1)">›</button>
-            <div class="sld-dots">${p.imgs.map((_, i) => `<span class="sld-dot ${i===0?'active':''}"></span>`).join('')}</div>
+            <div class="sld-dots">${list.map((_, i) => `<span class="sld-dot ${i === 0 ? 'active' : ''}"></span>`).join('')}</div>
           ` : ''}
         </div>
         <div class="b">
-          <h4>${p.name}</h4>
-          <span class="pr">$${p.price.toFixed(2)} USD</span>
+          <h4>${name}</h4>
+          <span class="pr">$${price.toFixed(2)} USD</span>
           <div class="lk">
-            <a href="${p.link}" target="_blank">Buy with Card</a>
+            <a href="${link}" target="_blank">Buy with Card</a>
           </div>
         </div>
       </article>
@@ -118,7 +113,14 @@ function renderTest() {
   }).join('');
 }
 
-renderTest();
+tb.onclick = e => {
+  if (e.target.dataset.c) {
+    cur = e.target.dataset.c;
+    r();
+  }
+};
+
+r();
 </script>
 <script src="layout.js"></script>
 </body>
