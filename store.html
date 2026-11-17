@@ -56,9 +56,15 @@
 </section>
 
 <script>
-// Función para generar las rutas de las imágenes en carpetas separadas
+// Función para generar las rutas automáticas
 const itemImgs = (folder, fileBase, total) => 
   Array.from({ length: total }, (_, i) => `img/store/${folder}/${fileBase} (${i + 1}).png`);
+
+// Lista específica para la gorra combinando ambos nombres de archivo exactos
+const capImgs = [
+  ...Array.from({ length: 6 }, (_, i) => `img/store/4. marcux cap/Marcux panel cap (${i + 1}).png`),
+  ...Array.from({ length: 7 }, (_, i) => `img/store/4. marcux cap/Marcux people cap (${i + 1}).png`)
+];
 
 // Catálogo con los productos actualizados
 const C = {
@@ -72,7 +78,7 @@ const C = {
     ['Marcux Desk mat', 13.00, itemImgs('1. desk-mat marcux', 'desk-mat marcux', 6), 'https://buy.stripe.com/3cI00l1Pa5tL2pnfY7aEE00'],
     ['Don-Tuch Backpack', 50.00, itemImgs('2. don-tuch backpack', 'don-tuch backpack', 18), 'https://buy.stripe.com/9B63cxalG3lD8NL4fpaEE01'],
     ['Don-Tuch Black Glossy Mug', 11.50, itemImgs('3. don-tuch black glossy mug', 'don-tuch black glossy mug', 8), 'https://buy.stripe.com/dRmfZj9hCf4l8NL9zJaEE02'],
-    ['Marcux Cap', 22.00, itemImgs('4. marcux cap', 'Marcux Cap', 13), '#']
+    ['Marcux Cap', 22.00, capImgs, '#']
   ]
 };
 
