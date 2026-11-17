@@ -9,65 +9,102 @@
 <meta property="og:image" content="img/marcux-portada.webp">
 <link rel="icon" href="img/logo.png">
 <link rel="stylesheet" href="style.css">
+<style>
+  /* Estilos del carrusel de imágenes */
+  .ph { position: relative; overflow: hidden; padding: 0; background: #000; height: 220px; }
+  .ph img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .sld-btn {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(13, 14, 28, 0.75); color: #fff; border: 1px solid rgba(255,255,255,0.2);
+    width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 16px; z-index: 2;
+  }
+  .sld-btn:hover { background: #6c63ff; }
+  .sld-prev { left: 8px; }
+  .sld-next { right: 8px; }
+  .sld-dots {
+    position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 4px; z-index: 2; background: rgba(13, 14, 28, 0.6);
+    padding: 3px 6px; border-radius: 10px; max-width: 90%; overflow-x: auto;
+  }
+  .sld-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.4); flex-shrink: 0; }
+  .sld-dot.active { background: #fff; }
+</style>
 </head>
 <body>
 <section>
 <div class="w">
-<h1>Store</h1>
-<p class="mute">Explore our official merch and support us as we continue creating games, stories, characters, and worlds.</p>
-<div class="tabs" id="tb"></div>
+<h1>Store - Prueba Desk Mat</h1>
+<p class="mute">Galería interactiva con las imágenes de Printful.</p>
 <div class="grid" id="pd"></div>
 </div>
 </section>
-<script>
-const G=['Marcux','Spiriat','Don-Tuch'];
-const C={
-  'Adult Clothing': [
-    ['Unisex classic tee', 23],
-    ['Unisex Hoodie', 46.5],
-    ['Snapback Hat', 26.5, ['Marcux']],
-    ['5 panel cap', 20, ['Marcux']]
-  ],
-  "Kids' Clothing": [
-    ['Youth Short Sleeve T-Shirt', 28.5],
-    ['Toddler Short Sleeve Tee', 26]
-  ],
-  'Accessories': [
-    ['Black Glossy Mug', 11.5],
-    ['Backpack', 50],
-    ['Desk mat', 13]
-  ]
-};
-let cur='Adult Clothing';
 
-function r(){
-  tb.innerHTML = Object.keys(C).map(c => `<button class="${c==cur?'on':''}" data-c="${c}">${c}</button>`).join('');
-  
-  pd.innerHTML = C[cur].flatMap(([n, p, o]) => 
-    (o || G).map(g => `
+<script>
+// Lista usando exactamente los nombres de tus archivos descargados
+const productosPrueba = [
+  {
+    name: 'Marcux Desk mat',
+    price: 13.00,
+    imgs: [
+      'img/store/desk-mat marcux (1).png',
+      'img/store/desk-mat marcux (2).png',
+      'img/store/desk-mat marcux (3).png',
+      'img/store/desk-mat marcux (4).png',
+      'img/store/desk-mat marcux (5).png',
+      'img/store/desk-mat marcux (6).png',
+      'img/store/desk-mat marcux (7).png',
+      'img/store/desk-mat marcux (8).png',
+      'img/store/desk-mat marcux (9).png',
+      'img/store/desk-mat marcux (10).png',
+      'img/store/desk-mat marcux (11).png',
+      'img/store/desk-mat marcux (12).png',
+      'img/store/desk-mat marcux (13).png',
+      'img/store/desk-mat marcux (14).png',
+      'img/store/desk-mat marcux (15).png',
+      'img/store/desk-mat marcux (16).png',
+      'img/store/desk-mat marcux (17).png',
+      'img/store/desk-mat marcux (18).png'
+    ],
+    link: '#'
+  }
+];
+
+function moveSlide(btn, dir) {
+  const box = btn.closest('.ph');
+  const imgs = JSON.parse(box.dataset.imgs);
+  let idx = (parseInt(box.dataset.idx) + dir + imgs.length) % imgs.length;
+  box.dataset.idx = idx;
+  box.querySelector('img').src = imgs[idx];
+  box.querySelectorAll('.sld-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+
+function renderTest() {
+  pd.innerHTML = productosPrueba.map(p => {
+    const multi = p.imgs.length > 1;
+    return `
       <article class="card">
-        <div class="ph">${g}<br>${n}</div>
+        <div class="ph" data-imgs='${JSON.stringify(p.imgs)}' data-idx="0">
+          <img src="${p.imgs[0]}" alt="${p.name}" loading="lazy">
+          ${multi ? `
+            <button type="button" class="sld-btn sld-prev" onclick="moveSlide(this, -1)">‹</button>
+            <button type="button" class="sld-btn sld-next" onclick="moveSlide(this, 1)">›</button>
+            <div class="sld-dots">${p.imgs.map((_, i) => `<span class="sld-dot ${i===0?'active':''}"></span>`).join('')}</div>
+          ` : ''}
+        </div>
         <div class="b">
-          <h4>${g} ${n}</h4>
-          <span class="pr">$${p.toFixed(2)} USD</span>
+          <h4>${p.name}</h4>
+          <span class="pr">$${p.price.toFixed(2)} USD</span>
           <div class="lk">
-            <!-- Reemplaza el # por tu enlace de pago con tarjeta (Lemon Squeezy o Stripe) -->
-            <a href="#" target="_blank">Buy with Card</a>
+            <a href="${p.link}" target="_blank">Buy with Card</a>
           </div>
         </div>
       </article>
-    `)
-  ).join('');
+    `;
+  }).join('');
 }
 
-tb.onclick = e => {
-  if(e.target.dataset.c) {
-    cur = e.target.dataset.c;
-    r();
-  }
-};
-
-r();
+renderTest();
 </script>
 <script src="layout.js"></script>
 </body>
