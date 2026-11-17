@@ -60,7 +60,7 @@
 const itemImgs = (folder, fileBase, total) => 
   Array.from({ length: total }, (_, i) => `img/store/${folder}/${fileBase} (${i + 1}).png`);
 
-// Catálogo con los productos actualizados incluyendo la nueva gorra
+// Catálogo con los productos actualizados
 const C = {
   'Adult Clothing': [
     // Aquí agregaremos la ropa de adultos más adelante
@@ -72,7 +72,7 @@ const C = {
     ['Marcux Desk mat', 13.00, itemImgs('1. desk-mat marcux', 'desk-mat marcux', 6), 'https://buy.stripe.com/3cI00l1Pa5tL2pnfY7aEE00'],
     ['Don-Tuch Backpack', 50.00, itemImgs('2. don-tuch backpack', 'don-tuch backpack', 18), 'https://buy.stripe.com/9B63cxalG3lD8NL4fpaEE01'],
     ['Don-Tuch Black Glossy Mug', 11.50, itemImgs('3. don-tuch black glossy mug', 'don-tuch black glossy mug', 8), 'https://buy.stripe.com/dRmfZj9hCf4l8NL9zJaEE02'],
-    ['Marcux Cap', 22.00, itemImgs('4. marcux cap', 'marcux cap', 13), '#']
+    ['Marcux Cap', 22.00, itemImgs('4. marcux cap', 'Marcux Cap', 13), '#']
   ]
 };
 
