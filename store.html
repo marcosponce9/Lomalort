@@ -67,7 +67,7 @@ const capImgs = [
   ...Array.from({ length: 7 }, (_, i) => `img/store/4. marcux cap/Marcux people cap (${i + 1}).png`)
 ];
 
-// Lista específica para la mochila de Spiriat escrita de forma explícita y segura
+// Lista específica para la mochila de Spiriat
 const spiriatBackpackImgs = [
   "img/store/5. spiriat backpack/spiriat backpack (1).png",
   "img/store/5. spiriat backpack/spiriat backpack (2).png",
@@ -118,7 +118,7 @@ function r() {
     return `
       <article class="card">
         <div class="ph" data-imgs='${JSON.stringify(list)}' data-idx="0">
-          <img src="${list[0]}" alt="${name}" loading="lazy" onerror="this.src='img/logo.png'">
+          <img src="${list[0]}" alt="${name}" loading="lazy">
           ${multi ? `
             <button type="button" class="sld-btn sld-prev" onclick="moveSlide(this, -1)">‹</button>
             <button type="button" class="sld-btn sld-next" onclick="moveSlide(this, 1)">›</button>
