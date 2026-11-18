@@ -47,8 +47,6 @@
 </head>
 <body>
 
-<!-- layout.js inyectará automáticamente aquí tu barra de navegación superior -->
-
 <section>
 <div class="w">
 <h1>Store</h1>
@@ -69,13 +67,13 @@ const capImgs = [
   ...Array.from({ length: 7 }, (_, i) => `img/store/4. marcux cap/Marcux people cap (${i + 1}).png`)
 ];
 
-// Lista específica para la mochila de Spiriat
+// Lista específica para la mochila de Spiriat con minúsculas exactas
 const spiriatBackpackImgs = [
-  ...Array.from({ length: 8 }, (_, i) => `img/store/5. spiriat backpack/Spiriat backpack (${i + 1}).png`),
-  ...Array.from({ length: 3 }, (_, i) => `img/store/5. spiriat backpack/Spiriat backpack kid (${i + 1}).png`)
+  ...Array.from({ length: 8 }, (_, i) => `img/store/5. spiriat backpack/spiriat backpack (${i + 1}).png`),
+  ...Array.from({ length: 3 }, (_, i) => `img/store/5. spiriat backpack/spiriat backpack kid (${i + 1}).png`)
 ];
 
-// Catálogo con los precios de las mochilas ajustados a 37.50 USD
+// Catálogo completo de productos
 const C = {
   'Adult Clothing': [
     // Aquí agregaremos la ropa de adultos más adelante
