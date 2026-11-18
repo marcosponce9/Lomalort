@@ -67,10 +67,19 @@ const capImgs = [
   ...Array.from({ length: 7 }, (_, i) => `img/store/4. marcux cap/Marcux people cap (${i + 1}).png`)
 ];
 
-// Lista específica para la mochila de Spiriat asegurando las minúsculas exactas
+// Lista específica para la mochila de Spiriat escrita de forma explícita y segura
 const spiriatBackpackImgs = [
-  ...Array.from({ length: 8 }, (_, i) => `img/store/5. spiriat backpack/spiriat backpack (${i + 1}).png`),
-  ...Array.from({ length: 3 }, (_, i) => `img/store/5. spiriat backpack/spiriat backpack kid (${i + 1}).png`)
+  "img/store/5. spiriat backpack/spiriat backpack (1).png",
+  "img/store/5. spiriat backpack/spiriat backpack (2).png",
+  "img/store/5. spiriat backpack/spiriat backpack (3).png",
+  "img/store/5. spiriat backpack/spiriat backpack (4).png",
+  "img/store/5. spiriat backpack/spiriat backpack (5).png",
+  "img/store/5. spiriat backpack/spiriat backpack (6).png",
+  "img/store/5. spiriat backpack/spiriat backpack (7).png",
+  "img/store/5. spiriat backpack/spiriat backpack (8).png",
+  "img/store/5. spiriat backpack/spiriat backpack kid (1).png",
+  "img/store/5. spiriat backpack/spiriat backpack kid (2).png",
+  "img/store/5. spiriat backpack/spiriat backpack kid (3).png"
 ];
 
 // Catálogo completo
@@ -109,7 +118,7 @@ function r() {
     return `
       <article class="card">
         <div class="ph" data-imgs='${JSON.stringify(list)}' data-idx="0">
-          <img src="${list[0]}" alt="${name}" loading="lazy">
+          <img src="${list[0]}" alt="${name}" loading="lazy" onerror="this.src='img/logo.png'">
           ${multi ? `
             <button type="button" class="sld-btn sld-prev" onclick="moveSlide(this, -1)">‹</button>
             <button type="button" class="sld-btn sld-next" onclick="moveSlide(this, 1)">›</button>
