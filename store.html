@@ -46,6 +46,9 @@
 </style>
 </head>
 <body>
+
+<!-- layout.js inyectará automáticamente aquí tu barra de navegación superior -->
+
 <section>
 <div class="w">
 <h1>Store</h1>
@@ -72,7 +75,7 @@ const spiriatBackpackImgs = [
   ...Array.from({ length: 3 }, (_, i) => `img/store/5. spiriat backpack/Spiriat backpack kid (${i + 1}).png`)
 ];
 
-// Catálogo con todos los productos actualizados
+// Catálogo con los precios de las mochilas ajustados a 37.50 USD
 const C = {
   'Adult Clothing': [
     // Aquí agregaremos la ropa de adultos más adelante
@@ -82,10 +85,10 @@ const C = {
   ],
   'Accessories': [
     ['Marcux Desk mat', 13.00, itemImgs('1. desk-mat marcux', 'desk-mat marcux', 6), 'https://buy.stripe.com/3cI00l1Pa5tL2pnfY7aEE00'],
-    ['Don-Tuch Backpack', 40.00, itemImgs('2. don-tuch backpack', 'don-tuch backpack', 18), 'https://buy.stripe.com/5kQcN73Xi8FXe85cLVaEE06'],
+    ['Don-Tuch Backpack', 37.50, itemImgs('2. don-tuch backpack', 'don-tuch backpack', 18), 'https://buy.stripe.com/5kQcN73Xi8FXe85cLVaEE06'],
     ['Don-Tuch Black Glossy Mug', 11.50, itemImgs('3. don-tuch black glossy mug', 'don-tuch black glossy mug', 8), 'https://buy.stripe.com/dRmfZj9hCf4l8NL9zJaEE02'],
     ['Marcux Cap', 22.00, capImgs, 'https://buy.stripe.com/00wbJ30L6cWd3trfY7aEE03'],
-    ['Spiriat Backpack', 50.00, spiriatBackpackImgs, 'https://buy.stripe.com/bJe4gB9hC9K13tr5jtaEE04']
+    ['Spiriat Backpack', 37.50, spiriatBackpackImgs, 'https://buy.stripe.com/bJe4gB9hC9K13tr5jtaEE04']
   ]
 };
 
