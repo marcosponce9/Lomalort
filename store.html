@@ -67,19 +67,10 @@ const capImgs = [
   ...Array.from({ length: 7 }, (_, i) => `img/store/4. marcux cap/Marcux people cap (${i + 1}).png`)
 ];
 
-// Lista específica para la mochila de Spiriat
+// Lista unificada para la mochila de Spiriat (las 8 normales con la función automática + las 3 de kid)
 const spiriatBackpackImgs = [
-  "img/store/5. spiriat backpack/spiriat backpack (1).png",
-  "img/store/5. spiriat backpack/spiriat backpack (2).png",
-  "img/store/5. spiriat backpack/spiriat backpack (3).png",
-  "img/store/5. spiriat backpack/spiriat backpack (4).png",
-  "img/store/5. spiriat backpack/spiriat backpack (5).png",
-  "img/store/5. spiriat backpack/spiriat backpack (6).png",
-  "img/store/5. spiriat backpack/spiriat backpack (7).png",
-  "img/store/5. spiriat backpack/spiriat backpack (8).png",
-  "img/store/5. spiriat backpack/spiriat backpack kid (1).png",
-  "img/store/5. spiriat backpack/spiriat backpack kid (2).png",
-  "img/store/5. spiriat backpack/spiriat backpack kid (3).png"
+  ...itemImgs('5. spiriat backpack', 'spiriat backpack', 8),
+  ...Array.from({ length: 3 }, (_, i) => `img/store/5. spiriat backpack/spiriat backpack kid (${i + 1}).png`)
 ];
 
 // Catálogo completo
@@ -129,7 +120,7 @@ function r() {
           <h4>${name}</h4>
           <span class="pr">$${price.toFixed(2)} USD</span>
           <div class="lk">
-            <a href="${link}" target="_blank">Buy with Card</a>
+            <a href="${link}" target="_blank">Buy card</a>
           </div>
         </div>
       </article>
