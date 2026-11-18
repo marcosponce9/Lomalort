@@ -10,7 +10,7 @@
 <link rel="icon" href="img/logo.png">
 <link rel="stylesheet" href="style.css">
 <style>
-  /* Estilos del carrusel: contain evita el zoom y muestra el producto completo */
+  /* Estilos del carrusel y botones */
   .ph { 
     position: relative; 
     overflow: hidden; 
@@ -43,6 +43,51 @@
   }
   .sld-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.4); flex-shrink: 0; }
   .sld-dot.active { background: #fff; }
+
+  /* Botón flotante del carrito */
+  .cart-float-btn {
+    position: fixed; bottom: 20px; right: 20px; background: #6c63ff; color: #fff;
+    border: none; padding: 12px 20px; border-radius: 30px; font-weight: bold;
+    cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 999;
+    display: flex; align-items: center; gap: 8px; font-size: 15px; transition: background 0.2s;
+  }
+  .cart-float-btn:hover { background: #574ede; }
+
+  /* Panel lateral del carrito (Drawer) */
+  .cart-drawer {
+    position: fixed; top: 0; right: -400px; width: 380px; height: 100%;
+    background: #121324; box-shadow: -5px 0 25px rgba(0,0,0,0.5); z-index: 1000;
+    transition: right 0.3s ease; display: flex; flex-direction: column; color: #fff;
+    border-left: 1px solid rgba(255,255,255,0.1);
+  }
+  .cart-drawer.open { right: 0; }
+  .cart-header {
+    padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .cart-header h3 { margin: 0; font-size: 18px; }
+  .close-cart { background: none; border: none; color: #aaa; font-size: 22px; cursor: pointer; }
+  .close-cart:hover { color: #fff; }
+  .cart-body { padding: 20px; flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+  .cart-item {
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(255,255,255,0.03); padding: 10px 15px; border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .cart-item-info h5 { margin: 0 0 4px 0; font-size: 14px; }
+  .cart-item-info span { font-size: 13px; color: #a0a0c0; }
+  .cart-item-remove { background: none; border: none; color: #ff5c5c; cursor: pointer; font-size: 16px; }
+  .cart-footer {
+    padding: 20px; border-top: 1px solid rgba(255,255,255,0.1);
+    background: #0d0e1c; display: flex; flex-direction: column; gap: 12px;
+  }
+  .cart-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: bold; }
+  .checkout-btn {
+    background: #28a745; color: #fff; border: none; padding: 12px; border-radius: 6px;
+    font-weight: bold; cursor: pointer; text-align: center; font-size: 15px; text-decoration: none;
+  }
+  .checkout-btn:hover { background: #218838; }
+  .empty-cart { text-align: center; color: #888; margin-top: 40px; }
 </style>
 </head>
 <body>
@@ -56,6 +101,29 @@
 </div>
 </section>
 
+<!-- Botón flotante para abrir el carrito -->
+<button class="cart-float-btn" onclick="toggleCart()">
+  🛒 Cart (<span id="cart-count">0</span>)
+</button>
+
+<!-- Panel lateral deslizante del carrito -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3>Your Shopping Cart</h3>
+    <button class="close-cart" onclick="toggleCart()">&times;</button>
+  </div>
+  <div class="cart-body" id="cart-items-container">
+    <!-- Los productos se cargan aquí de forma dinámica -->
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Total:</span>
+      <span id="cart-total-price">$0.00 USD</span>
+    </div>
+    <button class="checkout-btn" onclick="checkoutCart()">Proceed to Checkout</button>
+  </div>
+</div>
+
 <script>
 // Función para generar las rutas automáticas estándar
 const itemImgs = (folder, fileBase, total) => 
@@ -67,20 +135,16 @@ const capImgs = [
   ...Array.from({ length: 7 }, (_, i) => `img/store/4. marcux cap/Marcux people cap (${i + 1}).png`)
 ];
 
-// Lista unificada para la mochila de Spiriat (las 8 normales con la función automática + las 3 de kid)
+// Lista unificada para la mochila de Spiriat
 const spiriatBackpackImgs = [
   ...itemImgs('5. spiriat backpack', 'spiriat backpack', 8),
   ...Array.from({ length: 3 }, (_, i) => `img/store/5. spiriat backpack/spiriat backpack kid (${i + 1}).png`)
 ];
 
-// Catálogo completo
+// Catálogo completo con enlaces de Stripe
 const C = {
-  'Adult Clothing': [
-    // Aquí agregaremos la ropa de adultos más adelante
-  ],
-  "Kids' Clothing": [
-    // Aquí agregaremos la ropa de niños más adelante
-  ],
+  'Adult Clothing': [],
+  "Kids' Clothing": [],
   'Accessories': [
     ['Marcux Desk mat', 13.00, itemImgs('1. desk-mat marcux', 'desk-mat marcux', 6), 'https://buy.stripe.com/3cI00l1Pa5tL2pnfY7aEE00'],
     ['Don-Tuch Backpack', 37.50, itemImgs('2. don-tuch backpack', 'don-tuch backpack', 18), 'https://buy.stripe.com/5kQcN73Xi8FXe85cLVaEE06'],
@@ -90,7 +154,8 @@ const C = {
   ]
 };
 
-let cur = 'Accessories'; // Iniciamos en Accesorios para ver los productos
+let cur = 'Accessories';
+let cart = JSON.parse(localStorage.getItem('lomalort_cart')) || [];
 
 function moveSlide(btn, dir) {
   const box = btn.closest('.ph');
@@ -120,12 +185,65 @@ function r() {
           <h4>${name}</h4>
           <span class="pr">$${price.toFixed(2)} USD</span>
           <div class="lk">
-            <a href="${link}" target="_blank">Buy card</a>
+            <button class="checkout-btn" style="width:100%; padding:8px; font-size:14px;" onclick="addToCart('${name}', ${price}, '${link}')">Add to Cart</button>
           </div>
         </div>
       </article>
     `;
   }).join('');
+}
+
+// Funciones del Carrito
+function toggleCart() {
+  document.getElementById('cartDrawer').classList.toggle('open');
+}
+
+function addToCart(name, price, link) {
+  cart.push({ name, price, link });
+  updateCart();
+  toggleCart(); // Abre el carrito automáticamente al agregar un producto
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  updateCart();
+}
+
+function updateCart() {
+  localStorage.setItem('lomalort_cart', JSON.stringify(cart));
+  document.getElementById('cart-count').innerText = cart.length;
+  
+  const container = document.getElementById('cart-items-container');
+  if (cart.length === 0) {
+    container.innerHTML = `<div class="empty-cart">Your cart is empty.</div>`;
+    document.getElementById('cart-total-price').innerText = '$0.00 USD';
+    return;
+  }
+  
+  let total = 0;
+  container.innerHTML = cart.map((item, index) => {
+    total += item.price;
+    return `
+      <div class="cart-item">
+        <div class="cart-item-info">
+          <h5>${item.name}</h5>
+          <span>$${item.price.toFixed(2)} USD</span>
+        </div>
+        <button class="cart-item-remove" onclick="removeFromCart(${index})">🗑️</button>
+      </div>
+    `;
+  }).join('');
+  
+  document.getElementById('cart-total-price').innerText = `$${total.toFixed(2)} USD`;
+}
+
+function checkoutCart() {
+  if (cart.length === 0) {
+    alert('Your cart is empty!');
+    return;
+  }
+  // Abre el link de pago del primer producto en el carrito (o puedes gestionar múltiples pestañas)
+  window.open(cart[0].link, '_blank');
 }
 
 tb.onclick = e => {
@@ -136,6 +254,7 @@ tb.onclick = e => {
 };
 
 r();
+updateCart();
 </script>
 <script src="layout.js"></script>
 </body>
