@@ -57,7 +57,7 @@
 </section>
 
 <script>
-// Función para generar las rutas automáticas
+// Función para generar las rutas automáticas estándar
 const itemImgs = (folder, fileBase, total) => 
   Array.from({ length: total }, (_, i) => `img/store/${folder}/${fileBase} (${i + 1}).png`);
 
@@ -67,13 +67,13 @@ const capImgs = [
   ...Array.from({ length: 7 }, (_, i) => `img/store/4. marcux cap/Marcux people cap (${i + 1}).png`)
 ];
 
-// Lista específica para la mochila de Spiriat
+// Lista específica para la mochila de Spiriat asegurando las minúsculas exactas
 const spiriatBackpackImgs = [
   ...Array.from({ length: 8 }, (_, i) => `img/store/5. spiriat backpack/spiriat backpack (${i + 1}).png`),
   ...Array.from({ length: 3 }, (_, i) => `img/store/5. spiriat backpack/spiriat backpack kid (${i + 1}).png`)
 ];
 
-// Catálogo completo de productos con sus precios y enlaces
+// Catálogo completo
 const C = {
   'Adult Clothing': [
     // Aquí agregaremos la ropa de adultos más adelante
